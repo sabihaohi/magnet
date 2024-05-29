@@ -7,8 +7,8 @@ frame.on("ready", () => {
 
     // fixed magnet
     const fixedMagnet = new Container(240, 100).center();
-    const fixedMagnetN = new Rectangle(120, 100, "red");
-    const fixedMagnetS = new Rectangle(120, 100, "blue");
+    const fixedMagnetN = new Triangle(100,100,100, "red")
+    const fixedMagnetS = new Triangle(100, 100,120, "blue");
     fixedMagnetS.x = 120;
 
     new Label({
@@ -70,16 +70,16 @@ frame.on("ready", () => {
         console.log("min dis",minDistancce);
 
         if(distance1<distance2 && distance1<distance3 && distance1<distance4){
-           console.log(distance1)
+           
         }
         else if(distance2<distance1&& distance2<distance3 && distance2<distance4){
-            console.log(distance2)
+            
         }
        else if(distance3<distance1 && distance3<distance2 && distance3<distance4){
-        console.log(distance3)
+       
         }
         else{
-            console.log(distance4)
+            
         }
 
         const distance = zim.dist(draggableMagnet.x + 120, draggableMagnet.y + 60, fixedMagnet.x, fixedMagnet.y);
@@ -113,14 +113,14 @@ frame.on("ready", () => {
             ease: "bounceOut"
         });
 
-        timeout(0.5, ()=> {
-            fixedMagnet.animate({
-                target: fixedMagnet,
-                rotation: fixedMagnet.rotation + 180,
-                time:.2,
-                ease:"quadOut",
-            });
-        });
+        // timeout(0.5, ()=> {
+        //     fixedMagnet.animate({
+        //         target: fixedMagnet,
+        //         rotation: fixedMagnet.rotation + 180,
+        //         time:.2,
+        //         ease:"quadOut",
+        //     });
+        // });
        
         if (flipBtn.isOn) {
 
