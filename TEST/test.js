@@ -1,7 +1,6 @@
 import zim from "https://zimjs.org/cdn/016/zim";
 
-const { Frame, Container, Rectangle,Line } = zim;
-
+const { Frame, Container, Rectangle, } = zim;
 const frame = new Frame(FIT, 1920, 1080, "#eff");
 
 frame.on("ready", ()=>{
@@ -55,9 +54,10 @@ frame.on("ready", ()=>{
 
 
     let isFlipped = false;
-    dragMagnet.on("pressup", updateMagnets);
+    dragMagnet.on("pressup", updateMagnets,);
 
     btn.on("click",()=>{
+      
        isFlipped = isFlipped?false:true;
        dragMagnet.animate({
                 target: dragMagnet,
@@ -65,6 +65,7 @@ frame.on("ready", ()=>{
                 time: 0.1,
                 ease: "linear", 
        });
+       DrawLines();
        updateMagnets();
 
     });
@@ -72,11 +73,9 @@ frame.on("ready", ()=>{
         btn.x=dragMagnet.x;
         btn.y=dragMagnet.y;
         S.addChild(btn);
+        DrawLines();
 
     })
-
-    
-
 
     // function flipDragMagnet(){
 
@@ -151,13 +150,12 @@ frame.on("ready", ()=>{
         ssDis = zim.dist(dragMagnet.x+60, dragMagnet.y, fixedMagnet.x+60, fixedMagnet.y)-120;
 
         
-        const dragX = dragMagnet.x;
-        const dragY = dragMagnet.y;
-        const fixedX = fixedMagnet.x;
-        const fixedY = fixedMagnet.y;
+        // const dragX = dragMagnet.x;
+        // const dragY = dragMagnet.y;
+        // const fixedX = fixedMagnet.x;
+        // const fixedY = fixedMagnet.y;
 
-        const nnLine = new Rectangle(5,  "red"); 
-        nnLine.color="black"
+    
         // const nsLine = new Line(dragX - 60, dragY, fixedX + 60, fixedY); 
         // nsLine.color="black"
         // const snLine = new Line(dragX + 60, dragY, fixedX - 60, fixedY); 
@@ -207,8 +205,9 @@ frame.on("ready", ()=>{
         }
     }
 
+    btn.on("click",DrawLines);
 
-    dragMagnet.on("pressmove", DrawLines);
+    //dragMagnet.on("pressmove", DrawLines);
 
     const lines = [];
     function DrawLines(){
@@ -224,10 +223,11 @@ frame.on("ready", ()=>{
         let angleSS = zim.angle(dragMagnet.x+60, dragMagnet.y, fixedMagnet.x+60, fixedMagnet.y);
 
 
-        let widthNN = zim.dist(dragMagnet.x-60, dragMagnet.y, fixedMagnet.x-60, fixedMagnet.y);
+        let widthNN = zim.dist(dragMagnetN.x-60, dragMagnetN.y, fixedMagnetN.x-60, fixedMagnetN.y);
         let widthNS = zim.dist(dragMagnet.x-60,dragMagnet.y,fixedMagnet.x+60,fixedMagnet.y);
         let widthSN =zim.dist(dragMagnet.x+60,dragMagnet.y,fixedMagnet.x-60,fixedMagnet.y);
         let widthSS = zim.dist(dragMagnet.x+60, dragMagnet.y, fixedMagnet.x+60, fixedMagnet.y);
+        console.log(widthNN,widthNS,widthSN,widthSS);
 
 
         const line1 = new Rectangle(widthNN, height, "green");
@@ -248,12 +248,17 @@ frame.on("ready", ()=>{
         const line4 = new Rectangle(widthSS,height,"yellow");
         line4.pos(dragMagnet.x+60, dragMagnet.y).rot(angleSS);
         lines.push(line4);
+        
 
-
+ 
 
 
     }
 
+
+    
+  
+   
 
        
 
