@@ -12,8 +12,14 @@ frame.on("ready", ()=>{
     const fixedMagnetS = new Rectangle(120, 120, "blue");
     fixedMagnetS.x=120;
 
-    new Label({text: "N", color: "white", bold: true}).center(fixedMagnetN).mov(-20);
-    new Label({text: "S", color: "white", bold: true}).center(fixedMagnetS).mov(20);
+   const fixlabelN= new Label({text: "N", color: "white", bold: true}).center(fixedMagnetN).mov(-20).rot(90);
+   fixlabelN.y=45;
+   fixlabelN.x=60;
+
+    const fixlabelS=new Label({text: "S", color: "white", bold: true}).center(fixedMagnetS).mov(20).rot(-90);
+    fixlabelS.y=70;
+    fixlabelS.x=60;
+
 
     fixedMagnet.addChild(fixedMagnetN, fixedMagnetS);
     fixedMagnet.centerReg();
@@ -25,8 +31,15 @@ frame.on("ready", ()=>{
     const dragMagnetS = new Rectangle(120, 120, "blue");
     dragMagnetS.x=120;
 
-    new Label({text: "N", color: "white", bold: true}).center(dragMagnetN);
-    new Label({text: "S", color: "white", bold: true}).center(dragMagnetS);
+    const draglabelN = new Label({text: "N", color: "white", bold: true}).center(dragMagnetN).rot(90);
+    draglabelN.y=45;
+    draglabelN.x=60;
+    const draglabels= new Label({text: "S", color: "white", bold: true}).center(dragMagnetS).rot(-90);
+    draglabels.y=70;
+    draglabels.x=60;
+
+
+    
 
     dragMagnet.addChild(dragMagnetN, dragMagnetS);
     dragMagnet.centerReg().pos(0).drag({all:true});
@@ -37,72 +50,89 @@ frame.on("ready", ()=>{
     width: 80,
     height: 50,
     backgroundColor: "grey",
-    }).center(dragMagnet).tap(flipDragMagnet);
-
-    btn.centerReg();
+    }).centerReg();;
+  
 
 
     let isFlipped = false;
     dragMagnet.on("pressup", updateMagnets);
 
+    btn.on("click",()=>{
+       isFlipped = isFlipped?false:true;
+       dragMagnet.animate({
+                target: dragMagnet,
+                rotation: dragMagnet.rotation - 180,
+                time: 0.1,
+                ease: "linear", 
+       });
+       updateMagnets();
+
+    });
+    zim.Ticker.add(()=>{
+        btn.x=dragMagnet.x;
+        btn.y=dragMagnet.y;
+        S.addChild(btn);
+
+    })
+
     
 
 
-    function flipDragMagnet(){
+    // function flipDragMagnet(){
 
-        isFlipped = isFlipped ? false : true;
-        animate(dragMagnet, {
-            target: dragMagnet,
-            rotation: dragMagnet.rotation - 180,
-            time: 0.1,
-            ease: "linear",
-            call: updateMagnets,
-        });
-        btn.animate({
-            target: btn,
-            rotation: btn.rotation - 180,
-            time: 0.1,
-            ease: "linear",
-            call: updateMagnets,
-        });
-
-
+    //     isFlipped = isFlipped ? false : true;
+    //     animate(dragMagnet, {
+    //         target: dragMagnet,
+    //         rotation: dragMagnet.rotation - 180,
+    //         time: 0.1,
+    //         ease: "linear",
+    //         call: updateMagnets,
+    //     });
+    //     btn.animate({
+    //         target: btn,
+    //         rotation: btn.rotation - 180,
+    //         time: 0.1,
+    //         ease: "linear",
+    //         call: updateMagnets,
+    //     });
 
 
 
-        // if(isFlipped ==false){
-        //     isFlipped = true;
-        //     dragMagnetN.animate({
-        //         props: { x: 120 },
-        //         time: 1,
-        //         ease: "linear"
-        //     });
-        //     dragMagnetS.animate({
-        //         props: { x: 0 },
-        //         time: 1,
-        //         ease: "linear"
-        //     });
 
-        // }
-        // else{
-        //     isFlipped = false;
-        //     dragMagnetN.animate({
-        //         props: { x: 0 },
-        //         time: 1,
-        //         ease: "linear"
-        //     });
-        //     dragMagnetS.animate({
-        //         props: { x: 120 },
-        //         time: 1,
-        //         ease: "linear"
-        //     });
-        // }
+
+    //     // if(isFlipped ==false){
+    //     //     isFlipped = true;
+    //     //     dragMagnetN.animate({
+    //     //         props: { x: 120 },
+    //     //         time: 1,
+    //     //         ease: "linear"
+    //     //     });
+    //     //     dragMagnetS.animate({
+    //     //         props: { x: 0 },
+    //     //         time: 1,
+    //     //         ease: "linear"
+    //     //     });
+
+    //     // }
+    //     // else{
+    //     //     isFlipped = false;
+    //     //     dragMagnetN.animate({
+    //     //         props: { x: 0 },
+    //     //         time: 1,
+    //     //         ease: "linear"
+    //     //     });
+    //     //     dragMagnetS.animate({
+    //     //         props: { x: 120 },
+    //     //         time: 1,
+    //     //         ease: "linear"
+    //     //     });
+    //     // }
 
 
       
-       // updateMagnets();
+    //    // updateMagnets();
     
-    }
+    // }
     
 
     function updateMagnets(){

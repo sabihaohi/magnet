@@ -19,9 +19,9 @@ frame.on("ready", () => {
 
 
     //create fixed magnet
-    const DraggableMagnet = new Container(240, 120);
-    const fixedMagnetN = new Rectangle(120, 120, "red");
-    const fixedMagnetS = new Rectangle(120, 120, "blue");
+    const DragMagnet = new Container(240, 120);
+    const dragmagnetS = new Rectangle(120, 120, "red");
+    const dragmagnetN = new Rectangle(120, 120, "blue");
     fixedMagnetS.x=120;
 
     new Label({text: "N", color: "white", bold: true}).center(fixedMagnetN).mov(-20);
