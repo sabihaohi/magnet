@@ -1,6 +1,6 @@
 import zim from "https://zimjs.org/cdn/016/zim";
 
-const { Frame, Container, Rectangle } = zim;
+const { Frame, Container, Rectangle,Line } = zim;
 
 const frame = new Frame(FIT, 1920, 1080, "#eff");
 
@@ -134,13 +134,37 @@ frame.on("ready", ()=>{
     
     // }
     
+    // Lines.foreach(line=>{
+    //     line.removeForm();
+    // })
+    // Lines.length = 0;
+
+
 
     function updateMagnets(){
+
+        
         let nnDis, nsDis, snDis, ssDis;
         nnDis = zim.dist(dragMagnet.x-60, dragMagnet.y, fixedMagnet.x-60, fixedMagnet.y)-120;
         nsDis = zim.dist(dragMagnet.x-60, dragMagnet.y, fixedMagnet.x+60, fixedMagnet.y)-120;
         snDis = zim.dist(dragMagnet.x+60, dragMagnet.y, fixedMagnet.x-60, fixedMagnet.y)-120;
         ssDis = zim.dist(dragMagnet.x+60, dragMagnet.y, fixedMagnet.x+60, fixedMagnet.y)-120;
+
+        
+        const dragX = dragMagnet.x;
+        const dragY = dragMagnet.y;
+        const fixedX = fixedMagnet.x;
+        const fixedY = fixedMagnet.y;
+
+        const nnLine = new Rectangle(5,  "red"); 
+        nnLine.color="black"
+        // const nsLine = new Line(dragX - 60, dragY, fixedX + 60, fixedY); 
+        // nsLine.color="black"
+        // const snLine = new Line(dragX + 60, dragY, fixedX - 60, fixedY); 
+        // snLine.color="black"
+        // const ssLine = new Line(dragX + 60, dragY, fixedX + 60, fixedY); 
+        // ssLine.color="black"
+
         
 
         if(isFlipped){
@@ -182,6 +206,56 @@ frame.on("ready", ()=>{
             }
         }
     }
+
+
+    dragMagnet.on("pressmove", DrawLines);
+
+    const lines = [];
+    function DrawLines(){
+        lines.forEach(line => {
+            line.removeFrom();
+        })
+        lines.length = 0;
+        const height = 5;
+        //const angle = zim.angle(dragMagnet.x, dragMagnet.y, fixedMagnet.x, fixedMagnet.y);
+        let angleNN = zim.angle(dragMagnet.x-60, dragMagnet.y, fixedMagnet.x-60, fixedMagnet.y);
+        let angleNS = zim.angle(dragMagnet.x-60,dragMagnet.y,fixedMagnet.x+60,fixedMagnet.y) 
+        let angleSN=zim.angle(dragMagnet.x+60,dragMagnet.y,fixedMagnet.x-60,fixedMagnet.y);
+        let angleSS = zim.angle(dragMagnet.x+60, dragMagnet.y, fixedMagnet.x+60, fixedMagnet.y);
+
+
+        let widthNN = zim.dist(dragMagnet.x-60, dragMagnet.y, fixedMagnet.x-60, fixedMagnet.y);
+        let widthNS = zim.dist(dragMagnet.x-60,dragMagnet.y,fixedMagnet.x+60,fixedMagnet.y);
+        let widthSN =zim.dist(dragMagnet.x+60,dragMagnet.y,fixedMagnet.x-60,fixedMagnet.y);
+        let widthSS = zim.dist(dragMagnet.x+60, dragMagnet.y, fixedMagnet.x+60, fixedMagnet.y);
+
+
+        const line1 = new Rectangle(widthNN, height, "green");
+        line1.pos(dragMagnet.x-60, dragMagnet.y).rot(angleNN);
+        lines.push(line1);
+
+
+        const line2 = new Rectangle(widthNS, height, "blue");
+        line2.pos(dragMagnet.x-60, dragMagnet.y).rot(angleNS);
+        lines.push(line2);
+
+
+        const line3 = new Rectangle(widthSN, height, "red");
+        line3.pos(dragMagnet.x+60, dragMagnet.y).rot(angleSN);
+        lines.push(line3);
+
+
+        const line4 = new Rectangle(widthSS,height,"yellow");
+        line4.pos(dragMagnet.x+60, dragMagnet.y).rot(angleSS);
+        lines.push(line4);
+
+
+
+
+    }
+
+
+       
 
     function repulsionNN(angle){
         if(angle >= 0 && angle <= 20 || angle <= 360 && angle >= 335){
