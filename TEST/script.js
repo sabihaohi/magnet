@@ -1,143 +1,283 @@
 import zim from "https://zimjs.org/cdn/016/zim";
+const {Frame, Rectangle, Button, Ticker,Line} = zim;
 
-const { Frame, Container, Rectangle, Label, Button } = zim;
+const frame = new Frame(FIT, 1920, 1080, "#ffe");
 
-const frame = new Frame("fit", 1920, 1080, "#ddd");
-frame.on("ready", () => {
+frame.on("ready", ()=>{
 
-    // fixed magnet
-    const fixedMagnet = new Container(240, 100).center();
-    const fixedMagnetN = new Triangle(100,100,100, "red")
-    const fixedMagnetS = new Triangle(100, 100,120, "blue");
-    fixedMagnetS.x = 120;
-
-    new Label({
-        text: "N",
-        color: "white"
-    }).center(fixedMagnetN);
-
-    new Label({
-        text: "S",
-        color: "white"
-    }).center(fixedMagnetS);
+    // Fixed Magnet.
+    const fixedMagnet = new Rectangle(200, 100).centerReg();
+    const fixedMagnetN = new Rectangle(100, 100, "#fc2b1c");
+    const fixedMagnetS = new Rectangle(100, 100, "#347cf7");
+    fixedMagnetS.x = 100;
+    new Label({text: "N", color: "white", bold: true}).centerReg(fixedMagnetN).mov(-20).rot(90);
+    new Label({text: "S", color: "white", bold: true}).centerReg(fixedMagnetS).mov(20).rot(-90);
+ 
 
     fixedMagnet.addChild(fixedMagnetN, fixedMagnetS);
-    fixedMagnet.centerReg();
+
+
+    // Draggable Magnet.
+    const dragMagnet = new Rectangle(200, 100).centerReg().pos(50, null).drag();
+    const dragMagnetN = new Rectangle(100, 100, "#fc2b1c");
+    const dragMagnetS = new Rectangle(100, 100, "#347cf7");
+    dragMagnetS.x = 100;
+    new Label({text: "N", color: "white", bold: true}).centerReg(dragMagnetN).mov(-20).rot(90);
+    new Label({text: "S", color: "white", bold: true}).centerReg(dragMagnetS).mov(20).rot(-90);
+    dragMagnet.addChild(dragMagnetN, dragMagnetS);
 
     
+    const btn = new Button({label: "Flip", width: 75, height: 50}).reg(37.5, 25);
 
-    // draggable magnet.
-    const draggableMagnet = new Container(240, 100).center().mov(-500, 0);
+    let isFlipped = false;
+    btn.on("click", ()=>{
+        isFlipped = isFlipped?false:true;
+        dragMagnet.animate({
+            rotation: dragMagnet.rotation - 180,
+            time: 0.1,
+            ease: "linear"
+        });
+        updateMagnets();
+    });
 
-    const draggableMagnetN = new Rectangle(120, 100, "red");
-    const draggableMagnetS = new Rectangle(120, 100, "blue");
-    draggableMagnetS.x = 120;
-
-    new Label({
-        text: "N",
-        color: "white"
-    }).center(draggableMagnetN);
-
-    new Label({
-        text: "S",
-        color: "white"
-    }).center(draggableMagnetS);
-
-    draggableMagnet.addChild(draggableMagnetN, draggableMagnetS);
-    draggableMagnet.drag({ all: true });
-
-    // Set registration point of the draggable magnet to its center
-    draggableMagnet.regX = draggableMagnet.width / 2;
-    draggableMagnet.regY = draggableMagnet.height / 2;
-
-    const updateRotation = () => {
-
-        const distance1 = zim.dist(draggableMagnetN.x + draggableMagnet.x, draggableMagnetN.y + draggableMagnet.y, fixedMagnetS.x + fixedMagnet.x, fixedMagnetS.y + fixedMagnet.y);
-        //console.log("distance between draggableMagnetN and fixedMagnetS:", distance1);
-
-        const distance2 = zim.dist(draggableMagnetN.x + draggableMagnet.x,draggableMagnetN.y + draggableMagnet.y, fixedMagnetN.x + fixedMagnet.x,fixedMagnetN.y+ fixedMagnet.y);
-        //console.log("distance between draggableMagnetN and fixedMagnetN::",distance2);
-
-        const distance3 = zim.dist(draggableMagnetS.x + draggableMagnet.x,draggableMagnetS.y + draggableMagnet.y, fixedMagnetN.x + fixedMagnet.x,fixedMagnetN.y+ fixedMagnet.y);
-        //console.log("distance between draggableMagnetS and fixedMagnetN::",distance3);
-
-        const distance4 = zim.dist(draggableMagnetN.x + draggableMagnet.x,draggableMagnetN.y + draggableMagnet.y, fixedMagnetS.x + fixedMagnet.x,fixedMagnetS.y+ fixedMagnet.y);
-        //console.log("distance between draggableMagnetS and fixedMagnetN::",distance4);
-        console.log("dn to fs:",distance1,"dn to fN:",distance2,"ds to fs:",distance3,"dn to fs:",distance4);
+    Ticker.add(()=>{
+        btn.x = dragMagnet.x;
+        btn.y = dragMagnet.y;
+        S.addChild(btn);
+    });
 
 
-        const minDistancce = Math.min(distance1,distance2,distance3,distance4)
-        console.log("min dis",minDistancce);
 
-        if(distance1<distance2 && distance1<distance3 && distance1<distance4){
-           
-        }
-        else if(distance2<distance1&& distance2<distance3 && distance2<distance4){
-            
-        }
-       else if(distance3<distance1 && distance3<distance2 && distance3<distance4){
-       
-        }
-        else{
-            
-        }
-
-        const distance = zim.dist(draggableMagnet.x + 120, draggableMagnet.y + 60, fixedMagnet.x, fixedMagnet.y);
-        const angle = zim.angle(draggableMagnet.x, draggableMagnet.y, fixedMagnet.x, fixedMagnet.y); 
-
-        if (distance < 600) {
-            fixedMagnet.rot(angle);
-            if (flipBtn.isOn) {
-                draggableMagnetN.x = 120;
-                fixedMagnetS.x = 0;
-            } else {
-                draggableMagnetN.x = 0;
-                fixedMagnetS.x = 120;
-            }
-        }
-
-    }
-
-    draggableMagnet.on("pressmove", updateRotation);
-
-    // Create the flip button
-    const flipBtn = new Button(50, 50, "flip", "red", "grey").addTo(draggableMagnet);
-    flipBtn.x = 90;
-    flipBtn.y = 20;
-
-    const flipMagnet = () => {
-        draggableMagnet.animate({
-            target: draggableMagnet,
-            rotation: draggableMagnet.rotation + 180, 
-            time: 500, 
-            ease: "bounceOut"
+    dragMagnet.on("pressdown", ()=>{
+        dragMagnet.on("pressmove", ()=>{
+            drawLines();
         });
 
-        // timeout(0.5, ()=> {
-        //     fixedMagnet.animate({
-        //         target: fixedMagnet,
-        //         rotation: fixedMagnet.rotation + 180,
-        //         time:.2,
-        //         ease:"quadOut",
-        //     });
-        // });
-       
-        if (flipBtn.isOn) {
+        dragMagnet.on("pressup", ()=>{
+            removeLines();
+            updateMagnets();
+        });
+    });
 
-            
-        } else {
-           
-        }
-    };
 
- 
-    flipBtn.on("click", flipMagnet);
+    
+    const lines = [];
+    function drawLines(){
+        removeLines();
 
-    // const outerRect =  new Container(400, 300).center();
-    // fixedMagnet.addTo(outerRect);
-     
-    // if(draggableMagnet.hitTestRect(outerRect)){
+        const positions = getMagnetsGlobalPosition();
+        const distances = calculateDistances();
+        const angles = calculateAngles();
+
+        const line1 = new Line(distances.dragNfixedN, 5, "black").pos(positions.dragMagnetN).rot(angles.dragNfixedN);
+        lines.push(line1);
+
+        const line2 = new Line(distances.dragNfixedS, 5, "green").pos(positions.dragMagnetN).rot(angles.dragNfixedS);
+        lines.push(line2);
+
+        const line3 = new Line(distances.dragSfixedN, 5, "teal").pos(positions.dragMagnetS).rot(angles.dragSfixedN);
+        lines.push(line3);
+
+        const line4 = new Line(distances.dragSfixedS, 5, "brown").pos(positions.dragMagnetS).rot(angles.dragSfixedS);
+        lines.push(line4);
+    }
+
+    function removeLines(){
+        lines.forEach(line => {
+            line.removeFrom();
+        });
+        lines.length = 0;
+    }
+
+
+     function updateMagnets(){
+
+        const distances = calculateDistances();
+        const angles = calculateAngles();
+
+
         
-    // }
+        if(distances.minDistance <= 250){
+            if(distances.minDistance === distances.dragNfixedN){
+                repulsionNN(angles.dragNfixedN);
+
+            }
+            else if(distances.minDistance === distances.dragNfixedS){
+                attractionNS(angles.dragNfixedS);
+
+            }
+            else if(distances.minDistance === distances.dragSfixedN){
+                attractionSN(angles.dragSfixedN);
+                
+            }
+            else{
+                
+                repulsionSS(angles.dragSfixedS);
+            }
+        }
+    }
+
+
+    function repulsionNN(angle){
+        if(angle >= 0 && angle <= 20 || angle <= 360 && angle >= 335){
+            dragMagnet.animate({
+                target: dragMagnet,
+                props: {x:dragMagnet.x-300, y:dragMagnet.y},
+                time: 0.2,
+                ease: "quadOut",
+            });
+        }
+        else if(angle > 20 && angle <= 80){
+            dragMagnet.animate({
+                target: dragMagnet,
+                props: {x:dragMagnet.x, y:dragMagnet.y-200},
+                time: 0.2,
+                ease: "quadOut",
+            });
+        }
+        else if(angle >= 285 && angle < 335){
+            dragMagnet.animate({
+                target: dragMagnet,
+                props: {x:dragMagnet.x, y:dragMagnet.y+200},
+                time: 0.2,
+                ease: "quadOut",
+            });
+        }
+    }
+
+    function repulsionSS(angle){
+        if(angle <= 215 && angle >= 145){
+            dragMagnet.animate({
+                target: dragMagnet,
+                props: {x:dragMagnet.x+300, y:dragMagnet.y},
+                time: 0.2,
+                ease: "quadOut",
+            });
+        }
+        else if(angle >= 105 && angle <= 145){
+            dragMagnet.animate({
+                target: dragMagnet,
+                props: {x:dragMagnet.x, y:dragMagnet.y-200},
+                time: 0.2,
+                ease: "quadOut",
+            });
+        }
+        else if(angle >= 215 && angle < 265){
+            dragMagnet.animate({
+                target: dragMagnet,
+                props: {x:dragMagnet.x, y:dragMagnet.y+200},
+                time: 0.2,
+                ease: "quadOut",
+            });
+        }
+    }
+
+    function attractionSN(angle){
+        if(angle >=0 && angle <=45 || angle <= 360 && angle >= 315){
+            dragMagnet.animate({
+                target: dragMagnet,
+                props: {x:fixedMagnet.x-200, y:fixedMagnet.y},
+                time: 0.2,
+                ease: "quadOut",
+            });
+        }
+        else if(angle >=45 && angle <=105){
+            dragMagnet.animate({
+                target: dragMagnet,
+                props: {x:fixedMagnet.x-100, y:fixedMagnet.y-100},
+                time: 0.2,
+                ease: "quadOut",
+            });
+        }
+        else if(angle >=250 && angle < 315){
+            dragMagnet.animate({
+                target: dragMagnet,
+                props: {x:fixedMagnet.x-100, y:fixedMagnet.y+100},
+                time: 0.2,
+                ease: "quadOut",
+            });
+        }
+    }
+
+    function attractionNS(angle){
+        if(angle >=180 && angle <= 225 || angle <= 180 && angle >= 135){
+            dragMagnet.animate({
+                target: dragMagnet,
+                props: {x:fixedMagnet.x+200, y:fixedMagnet.y},
+                time: 0.2,
+                ease: "quadOut",
+            });
+        }
+        else if(angle >= 70 && angle < 135){
+            dragMagnet.animate({
+                target: dragMagnet,
+                props: {x:fixedMagnet.x+100, y:fixedMagnet.y-100},
+                time: 0.2,
+                ease: "quadOut",
+            });
+        }
+        else if(angle > 225 && angle < 285){
+            dragMagnet.animate({
+                target: dragMagnet,
+                props: {x:fixedMagnet.x+100, y:fixedMagnet.y+100},
+                time: 0.2,
+                ease: "quadOut",
+            });
+        }
+        else if(angle < 70){
+            dragMagnet.animate({
+                target: dragMagnet,
+                props: {x:fixedMagnet.x, y:fixedMagnet.y-100},
+                time: 0.2,
+                ease: "quadOut",
+            });
+        }
+        else if(angle > 280){
+            dragMagnet.animate({
+                target: dragMagnet,
+                props: {x:fixedMagnet.x, y:fixedMagnet.y+100},
+                time: 0.2,
+                ease: "quadOut",
+            });
+        }
+    }
+
+    function calculateDistances(){
+        const magnetPos = getMagnetsGlobalPosition();
+        const distances = {}
+
+        distances.dragNfixedN = zim.dist(magnetPos.dragMagnetN.x, magnetPos.dragMagnetN.y, magnetPos.fixedMagnetN.x, magnetPos.fixedMagnetN.y);
+        distances.dragNfixedS = zim.dist(magnetPos.dragMagnetN.x, magnetPos.dragMagnetN.y, magnetPos.fixedMagnetS.x, magnetPos.fixedMagnetS.y);
+        distances.dragSfixedN = zim.dist(magnetPos.dragMagnetS.x, magnetPos.dragMagnetS.y, magnetPos.fixedMagnetN.x, magnetPos.fixedMagnetN.y);
+        distances.dragSfixedS = zim.dist(magnetPos.dragMagnetS.x, magnetPos.dragMagnetS.y, magnetPos.fixedMagnetS.x, magnetPos.fixedMagnetS.y);
+
+        distances.minDistance = Math.min(distances.dragNfixedN, distances.dragNfixedS, distances.dragSfixedN, distances.dragSfixedS);
+
+        return distances;
+    }
+
+    function calculateAngles(){
+        const magnetPos = getMagnetsGlobalPosition();
+        const angles = {}
+
+        angles.dragNfixedN = zim.angle(magnetPos.dragMagnetN.x, magnetPos.dragMagnetN.y, magnetPos.fixedMagnetN.x, magnetPos.fixedMagnetN.y);
+        angles.dragNfixedS = zim.angle(magnetPos.dragMagnetN.x, magnetPos.dragMagnetN.y, magnetPos.fixedMagnetS.x, magnetPos.fixedMagnetS.y);
+        angles.dragSfixedN = zim.angle(magnetPos.dragMagnetS.x, magnetPos.dragMagnetS.y, magnetPos.fixedMagnetN.x, magnetPos.fixedMagnetN.y);
+        angles.dragSfixedS = zim.angle(magnetPos.dragMagnetS.x, magnetPos.dragMagnetS.y, magnetPos.fixedMagnetS.x, magnetPos.fixedMagnetS.y);
+        angles.centerToCenter = zim.angle(dragMagnet.x, dragMagnet.y, fixedMagnet.x, fixedMagnet.y);
+
+        return angles;
+    }
+
+    function getMagnetsGlobalPosition(){
+        const magnetPos = {};
+        // Convert local position to global position
+        magnetPos.fixedMagnetN = fixedMagnetN.localToGlobal(50, 50);
+        magnetPos.fixedMagnetS = fixedMagnetS.localToGlobal(50, 50);
+        magnetPos.dragMagnetN = dragMagnetN.localToGlobal(50, 50);
+        magnetPos.dragMagnetS = dragMagnetS.localToGlobal(50, 50);
+
+        return magnetPos;
+    }
 
 });

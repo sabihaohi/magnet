@@ -54,7 +54,7 @@ frame.on("ready", ()=>{
 
 
     let isFlipped = false;
-    dragMagnet.on("pressup", updateMagnets,);
+    dragMagnet.on("pressup", updateMagnets);
 
     btn.on("click",()=>{
       
@@ -65,7 +65,6 @@ frame.on("ready", ()=>{
                 time: 0.1,
                 ease: "linear", 
        });
-       DrawLines();
        updateMagnets();
 
     });
@@ -73,73 +72,11 @@ frame.on("ready", ()=>{
         btn.x=dragMagnet.x;
         btn.y=dragMagnet.y;
         S.addChild(btn);
-        DrawLines();
+    
 
     })
 
-    // function flipDragMagnet(){
-
-    //     isFlipped = isFlipped ? false : true;
-    //     animate(dragMagnet, {
-    //         target: dragMagnet,
-    //         rotation: dragMagnet.rotation - 180,
-    //         time: 0.1,
-    //         ease: "linear",
-    //         call: updateMagnets,
-    //     });
-    //     btn.animate({
-    //         target: btn,
-    //         rotation: btn.rotation - 180,
-    //         time: 0.1,
-    //         ease: "linear",
-    //         call: updateMagnets,
-    //     });
-
-
-
-
-
-    //     // if(isFlipped ==false){
-    //     //     isFlipped = true;
-    //     //     dragMagnetN.animate({
-    //     //         props: { x: 120 },
-    //     //         time: 1,
-    //     //         ease: "linear"
-    //     //     });
-    //     //     dragMagnetS.animate({
-    //     //         props: { x: 0 },
-    //     //         time: 1,
-    //     //         ease: "linear"
-    //     //     });
-
-    //     // }
-    //     // else{
-    //     //     isFlipped = false;
-    //     //     dragMagnetN.animate({
-    //     //         props: { x: 0 },
-    //     //         time: 1,
-    //     //         ease: "linear"
-    //     //     });
-    //     //     dragMagnetS.animate({
-    //     //         props: { x: 120 },
-    //     //         time: 1,
-    //     //         ease: "linear"
-    //     //     });
-    //     // }
-
-
-      
-    //    // updateMagnets();
-    
-    // }
-    
-    // Lines.foreach(line=>{
-    //     line.removeForm();
-    // })
-    // Lines.length = 0;
-
-
-
+   
     function updateMagnets(){
 
         
@@ -149,21 +86,6 @@ frame.on("ready", ()=>{
         snDis = zim.dist(dragMagnet.x+60, dragMagnet.y, fixedMagnet.x-60, fixedMagnet.y)-120;
         ssDis = zim.dist(dragMagnet.x+60, dragMagnet.y, fixedMagnet.x+60, fixedMagnet.y)-120;
 
-        
-        // const dragX = dragMagnet.x;
-        // const dragY = dragMagnet.y;
-        // const fixedX = fixedMagnet.x;
-        // const fixedY = fixedMagnet.y;
-
-    
-        // const nsLine = new Line(dragX - 60, dragY, fixedX + 60, fixedY); 
-        // nsLine.color="black"
-        // const snLine = new Line(dragX + 60, dragY, fixedX - 60, fixedY); 
-        // snLine.color="black"
-        // const ssLine = new Line(dragX + 60, dragY, fixedX + 60, fixedY); 
-        // ssLine.color="black"
-
-        
 
         if(isFlipped){
             // NN to SN
@@ -205,7 +127,7 @@ frame.on("ready", ()=>{
         }
     }
 
-    btn.on("click",DrawLines);
+   // btn.on("click",DrawLines);
 
     //dragMagnet.on("pressmove", DrawLines);
 
@@ -223,7 +145,7 @@ frame.on("ready", ()=>{
         let angleSS = zim.angle(dragMagnet.x+60, dragMagnet.y, fixedMagnet.x+60, fixedMagnet.y);
 
 
-        let widthNN = zim.dist(dragMagnetN.x-60, dragMagnetN.y, fixedMagnetN.x-60, fixedMagnetN.y);
+        let widthNN = zim.dist(dragMagnet.x-60, dragMagnetN.y, fixedMagnetN.x-60, fixedMagnetN.y);
         let widthNS = zim.dist(dragMagnet.x-60,dragMagnet.y,fixedMagnet.x+60,fixedMagnet.y);
         let widthSN =zim.dist(dragMagnet.x+60,dragMagnet.y,fixedMagnet.x-60,fixedMagnet.y);
         let widthSS = zim.dist(dragMagnet.x+60, dragMagnet.y, fixedMagnet.x+60, fixedMagnet.y);
@@ -256,11 +178,7 @@ frame.on("ready", ()=>{
     }
 
 
-    
   
-   
-
-       
 
     function repulsionNN(angle){
         if(angle >= 0 && angle <= 20 || angle <= 360 && angle >= 335){
